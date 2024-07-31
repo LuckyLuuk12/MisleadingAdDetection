@@ -17,7 +17,7 @@ class Collector:
     """
 
     def __init__(self):
-        self.ad_library_url = 'https://graph.facebook.com/v13.0/ads_archive'
+        self.ad_library_url = 'https://graph.facebook.com/v20.0/ads_archive'
         self.state_file = 'state.json'
         self.output_dir = 'out'
         self.state = {}
