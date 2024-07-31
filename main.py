@@ -23,9 +23,8 @@ def main():
             collector.collect()
         elif choice == '2':
             analyzer.analyze()
-        elif choice == '3':
-            break
         else:
+            print('Closing the program...')
             break
 
 
