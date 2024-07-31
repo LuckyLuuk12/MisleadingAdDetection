@@ -77,10 +77,10 @@ class Collector:
                 amount += 1
             # Handle exceptions
             except requests.exceptions.HTTPError as http_err:
-                print(f'HTTP error occurred: {http_err}')
+                print(f'HTTP error occurred: {http_err} \n Stopping the collection process..')
                 break
             except Exception as err:
-                print(f'Other error occurred: {err}')
+                print(f'Other error occurred: {err} \n Stopping the collection process..')
                 break
         # Save ads to a JSON file
         date_str = datetime.now().strftime('%Y%m%d')
