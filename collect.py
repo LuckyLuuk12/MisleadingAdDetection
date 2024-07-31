@@ -8,6 +8,7 @@ import json
 import os
 from datetime import datetime
 from dotenv import load_dotenv
+import pandas as pd
 
 
 class Collector:
@@ -84,9 +85,9 @@ class Collector:
                 break
         # Save ads to a JSON file
         date_str = datetime.now().strftime('%Y%m%d')
-        output_file = os.path.join(self.output_dir, f'ads_{date_str}.json')
-        with open(output_file, 'w') as f:
-            json.dump(ads, f, indent=4)
+        output_file = os.path.join(self.output_dir, f'ads_{date_str}.csv')
+        df = pd.DataFrame(ads)
+        df.to_csv(output_file, index=False)
         # Return the ads for optional further processing
         return ads
 
