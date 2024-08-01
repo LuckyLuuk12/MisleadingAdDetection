@@ -34,17 +34,33 @@ class Collector:
             self.state = {'after': None}
 
     def load_params(self):
-        # Load environment variables
-        load_dotenv()
-        self.limit = int(os.getenv('LIMIT'))
+        self.limit = os.getenv('LIMIT') or -1
         params = {
-            'access_token': os.getenv('ACCESS_TOKEN'),
+            'access_token': self.get_token(),
             'ad_reached_countries': 'ALL',
             'ad_type': 'ALL'
         }
         if self.state['after']:
             params['after'] = self.state['after']
         return params
+
+    def get_token(self):
+        """
+        This method uses the app secret and app id to get an access token from the API.
+        :return: The access token.
+        """
+        # Load environment variables
+        load_dotenv()
+        app_id = os.getenv('APP_ID')
+        app_secret = os.getenv('APP_SECRET')
+        url = f'https://graph.facebook.com/oauth/access_token?client_id={app_id}&client_secret={app_secret}&grant_type=client_credentials'
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+            data = response.json()
+            return data['access_token']
+        except requests.exceptions.HTTPError as http_err:
+            print(f'HTTP error occurred: {http_err} \n Stopping the collection process..')
 
     def collect(self):
         """
@@ -89,7 +105,7 @@ class Collector:
             except Exception as err:
                 print(f'Other error occurred: {err} \n Stopping the collection process..')
                 break
-        # Save ads to a JSON file
+        # Save ads to a CSV file
         date_str = datetime.now().strftime('%Y%m%d')
         output_file = os.path.join(self.output_dir, f'ads_{date_str}.csv')
         df = pd.DataFrame(ads)

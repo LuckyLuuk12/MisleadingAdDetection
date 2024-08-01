@@ -17,11 +17,15 @@ def main():
     while True:
         print('1. Collect data')
         print('2. Analyze data')
-        print('3. Exit')
+        print('3. Collect & Analyze data')
+        print('4. Exit')
         choice = input('Enter your choice: ')
         if choice == '1':
             collector.collect()
         elif choice == '2':
+            analyzer.analyze()
+        elif choice == '3':
+            collector.collect()
             analyzer.analyze()
         else:
             print('Closing the program...')
