@@ -52,6 +52,8 @@ class Collector:
         """
         # Load environment variables
         load_dotenv()
+        if os.getenv('ACCESS_TOKEN'):
+            return os.getenv('ACCESS_TOKEN')
         app_id = os.getenv('APP_ID')
         app_secret = os.getenv('APP_SECRET')
         url = f'https://graph.facebook.com/oauth/access_token?client_id={app_id}&client_secret={app_secret}&grant_type=client_credentials'
@@ -78,10 +80,10 @@ class Collector:
                 if 0 < self.limit <= amount:
                     print(f'Limit of {self.limit} ads reached. Stopping the collection process..')
                     break
-                if amount % 100 == 0:
-                    print(f'Collected {amount} ads')
                 try:
                     response = requests.get(self.ad_library_url, params=params)
+                    if amount % 100 == 0:
+                        print(f'Collected {amount} ads from {response.url}')
                     response.raise_for_status()
                     data = response.json()
                     if 'data' in data:
