@@ -21,6 +21,7 @@ class Collector:
         self.state_file = 'state.json'
         self.output_dir = 'out'
         self.state = {}
+        self.limit = -1
 
     def load_state(self):
         if not os.path.exists(self.output_dir):
@@ -35,6 +36,7 @@ class Collector:
     def load_params(self):
         # Load environment variables
         load_dotenv()
+        self.limit = int(os.getenv('LIMIT'))
         params = {
             'access_token': os.getenv('ACCESS_TOKEN'),
             'ad_reached_countries': 'ALL',
@@ -54,6 +56,10 @@ class Collector:
         ads = {}
         amount = 0
         while True:
+            # Check if the limit is reached
+            if 0 < self.limit <= amount:
+                print(f'Limit of {self.limit} ads reached. Stopping the collection process..')
+                break
             # Print progress
             if amount % 100 == 0:
                 print(f'Collected {amount} ads')
