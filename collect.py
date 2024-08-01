@@ -3,6 +3,7 @@
 @description: This file contains the collection class that is used to collect the data from the API.
 @date: 31-7-2024
 """
+import jsonlines
 import requests
 import json
 import os
@@ -69,47 +70,38 @@ class Collector:
         """
         self.load_state()  # Load the state
         params = self.load_params()  # Load the parameters
-        ads = {}
         amount = 0
-        while True:
-            # Check if the limit is reached
-            if 0 < self.limit <= amount:
-                print(f'Limit of {self.limit} ads reached. Stopping the collection process..')
-                break
-            # Print progress
-            if amount % 100 == 0:
-                print(f'Collected {amount} ads')
-            # Try to handle a request
-            try:
-                response = requests.get(self.ad_library_url, params=params)
-                response.raise_for_status()
-                data = response.json()
-                # If there is data, label it with a timestamp
-                if 'data' in data:
-                    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                    ads[timestamp] = data['data']
-                # Handle pagination
-                if 'paging' in data and 'next' in data['paging']:
-                    params['after'] = data['paging']['cursors']['after']
-                    self.state['after'] = params['after']
-                    with open(self.state_file, 'w') as f:
-                        json.dump(self.state, f)
-                else:
-                    break
-                # Increment the amount of ads loaded
-                amount += 1
-            # Handle exceptions
-            except requests.exceptions.HTTPError as http_err:
-                print(f'HTTP error occurred: {http_err} \n Stopping the collection process..')
-                break
-            except Exception as err:
-                print(f'Other error occurred: {err} \n Stopping the collection process..')
-                break
-        # Save ads to a CSV file
         date_str = datetime.now().strftime('%Y%m%d')
-        output_file = os.path.join(self.output_dir, f'ads_{date_str}.csv')
-        df = pd.DataFrame(ads)
-        df.to_csv(output_file, index=False)
-        # Return the ads for optional further processing
-        return ads
+        output_file = os.path.join(self.output_dir, f'ads_{date_str}.jsonl')
+        with jsonlines.open(output_file, mode='a') as writer:
+            while True:
+                if 0 < self.limit <= amount:
+                    print(f'Limit of {self.limit} ads reached. Stopping the collection process..')
+                    break
+                if amount % 100 == 0:
+                    print(f'Collected {amount} ads')
+                try:
+                    response = requests.get(self.ad_library_url, params=params)
+                    response.raise_for_status()
+                    data = response.json()
+                    if 'data' in data:
+                        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                        for ad in data['data']:
+                            ad['timestamp'] = timestamp
+                            writer.write(ad)
+                    if 'paging' in data and 'next' in data['paging']:
+                        params['after'] = data['paging']['cursors']['after']
+                        self.state['after'] = params['after']
+                        with open(self.state_file, 'w') as f:
+                            json.dump(self.state, f)
+                    else:
+                        break
+                    amount += 1
+                except requests.exceptions.HTTPError as http_err:
+                    print(f'HTTP error occurred: {http_err} \n Stopping the collection process..')
+                    break
+                except Exception as err:
+                    print(f'Other error occurred: {err} \n Stopping the collection process..')
+                    break
+        return output_file
 
