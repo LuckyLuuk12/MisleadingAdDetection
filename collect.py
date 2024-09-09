@@ -9,7 +9,6 @@ import json
 import os
 from datetime import datetime
 from dotenv import load_dotenv
-import pandas as pd
 
 
 class Collector:
@@ -38,8 +37,9 @@ class Collector:
         self.limit = os.getenv('LIMIT') or -1
         params = {
             'access_token': self.get_token(),
-            'ad_reached_countries': 'ALL',
-            'ad_type': 'ALL'
+            'ad_reached_countries': 'US,CA,GB,AU,NZ,DE,FR,IT,ES,NL,SE,NO,DK,FI,IE,BE,AT,CH,PL,CZ,PT,GR,HU,RO,BG,SI,HR,SK,LV,LT,EE,IS,MT,CY,RU,CN,JP,KR,IN,ID,MY,TH,SG,PH,VN,HK,TW,BR,MX,AR,CL,CO,PE,VE,UY,BO,PY,EC,ZA,EG,NG,KE,MA,DZ,TN,GH,CI,AE,SA,QA,KW,OM,BH,IL,TR',
+            'ad_type': 'ALL',
+            'search_terms': ('cryptocurrency,bitcoin,giveaway')
         }
         if self.state['after']:
             params['after'] = self.state['after']
@@ -54,6 +54,7 @@ class Collector:
         load_dotenv()
         if os.getenv('ACCESS_TOKEN'):
             return os.getenv('ACCESS_TOKEN')
+        # It appears that below method is not working anymore. It is better to use the access token from the .env file.
         app_id = os.getenv('APP_ID')
         app_secret = os.getenv('APP_SECRET')
         url = f'https://graph.facebook.com/oauth/access_token?client_id={app_id}&client_secret={app_secret}&grant_type=client_credentials'
@@ -61,9 +62,10 @@ class Collector:
             response = requests.get(url)
             response.raise_for_status()
             data = response.json()
+            print(f'Access token received successfully from {response.url}')
             return data['access_token']
         except requests.exceptions.HTTPError as http_err:
-            print(f'HTTP error occurred: {http_err} \n Stopping the collection process..')
+            print(f'1. HTTP error occurred: {http_err} \n Stopping the collection process..')
 
     def collect(self):
         """
@@ -100,10 +102,10 @@ class Collector:
                         break
                     amount += 1
                 except requests.exceptions.HTTPError as http_err:
-                    print(f'HTTP error occurred: {http_err} \n Stopping the collection process..')
+                    print(f'2. HTTP error occurred: {http_err} \n Stopping the collection process..')
                     break
                 except Exception as err:
-                    print(f'Other error occurred: {err} \n Stopping the collection process..')
+                    print(f'3. Other error occurred: {err} \n Stopping the collection process..')
                     break
         return output_file
 
