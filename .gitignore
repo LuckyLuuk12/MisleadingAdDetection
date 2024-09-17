@@ -2,3 +2,5 @@
 .venv
 out
 out/*
+output/*
+state.json
