@@ -3,6 +3,8 @@
 @description: This file contains the analysis class that is used to analyze the data.
 @date: 31-7-2024
 """
+from AdDownloader.start_app import start_gui
+from AdDownloader.cli import run_analysis
 
 class Analyzer:
     """
@@ -21,4 +23,6 @@ class Analyzer:
         This method analyzes the data.
         :return: The analysis results.
         """
+        start_gui()
+        run_analysis()
         pass
