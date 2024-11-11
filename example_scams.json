@@ -1,0 +1,46 @@
+{
+    "data": [
+		{
+			"id": "425802560515058",
+			"ad_creative_bodies": [
+				"Hurry Now"
+			],
+			"video_transcription": "congratulations claim free 135000 AirDrop visits the website on the screen now",
+			"output": 
+			{
+				"ad_id": "425802560515058",
+				"classification": "S",
+				"confidence": 1.0,
+				"explanation": "It mentions a free claim and motivates the reader to hurry up and press the screen now"
+			}
+		},
+		{
+            "id": "811934220805185",
+			"ad_creative_bodies": [
+                "95% increase in three days!!!\nDo you really know enough about digital currency?\n1.Join my whatsapp group to study for free\n2.Let everyone get a stable income!\nThis discussion group is designed for those who want to get into cryptocurrency trading and will teach you a complete cryptocurrency guide and powerful strategies to help you learn how to make a profit every day.\nHere are more details on what you'll learn:\n1.When to buy and when to sell cryptocurrencies for profit\n2.How to read charts and indicators and use them for trading\n3.How to use and implement stop loss to reduce losses\nJoin for free, and professional analysts will answer your questions.\ud83e\udd70"
+            ],
+			"video_transcription": "own these other assets and meme coins are no longer a joke two or three years ago they were a joke they were they were just laughed off by a lot of people it's not the way anymore be sure to click the link below to get your part of a 5 million dollar crypto AirDrop check it out",
+			"output": 
+			{
+				"ad_id": "811934220805185",
+				"classification": "S",
+				"confidence": 1.0,
+				"explanation": "It mentions a claim for 5 million dollar and offers unrealistic increase in an investment"
+			}
+		},
+		{
+			"id": "522965756799004",
+			"ad_creative_bodies": [
+                "Go to my profile #ton #not #coin #crypto"
+            ],
+			"video_transcription": "go to Instagram account using the link in the profile click on the link in bio then click claim reward and connect wallet to receive not withdraw not to your account",
+			"output": 
+			{
+				"ad_id": "522965756799004",
+				"classification": "S",
+				"confidence": 1.0,
+				"explanation": "It mentions a claim of a reward and motivates to click a link in the profile to connect the crypto wallet"
+			}
+		}
+	]
+}

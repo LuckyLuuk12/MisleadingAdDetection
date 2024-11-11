@@ -23,7 +23,7 @@ class Collector:
         self.countries = 'US' if os.getenv('COUNTRIES') is None else os.getenv('COUNTRIES')
         self.start_date = '2024-05-01' if os.getenv('START_DATE') is None else os.getenv('START_DATE')
         self.search_terms = 'crypto' if os.getenv('SEARCH_TERMS') is None else os.getenv('SEARCH_TERMS')
-        self.access_token = self.get_token()
+        self.access_token = None
         self.project_name = 'ads' if os.getenv('PROJECT_NAME') is None else os.getenv('PROJECT_NAME')
         self.fields = os.getenv('FIELDS')
         self.api = None
@@ -49,6 +49,8 @@ class Collector:
         """
         if token is None:
             token = self.access_token
+        if token is None:
+            return True
         # Check if the token is expired
         url = f'https://graph.facebook.com/me?access_token={token}'
         response = requests.get(url)
