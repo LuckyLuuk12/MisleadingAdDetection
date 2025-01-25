@@ -3,7 +3,6 @@
 @description: Main code that provides Console User Interface to perform the steps of the project.
 @date: 31-7-2024
 """
-import datetime
 
 from ai import AIToolBox
 from collect import Collector
