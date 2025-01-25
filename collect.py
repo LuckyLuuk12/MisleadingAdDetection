@@ -10,7 +10,7 @@ from AdDownloader.media_download import start_media_download
 import os
 from dotenv import load_dotenv
 import requests
-
+from tqdm import tqdm
 
 class Collector:
     """
@@ -69,7 +69,7 @@ class Collector:
         start_time = datetime.datetime.now()
         print(f'» [{start_time.strftime("%H:%M")}] Starting data collection...')
         # Split the search terms and collect the data for each term
-        for term in self.search_terms.split(';'):
+        for term in tqdm(self.search_terms.split(';'), desc='Collecting ads'):
             print(f'» [{datetime.datetime.now().strftime("%H:%M")}] Starting data collection for `{term}`...')
             using_project = self.project_name if project_name is None else project_name
             using_project = f'{using_project}_{term}'

@@ -3,4 +3,6 @@
 out
 out/*
 output/*
-state.json
+!output/filtered-unique.json
+!output/samples.json
+manual/*

@@ -3,10 +3,12 @@
 @description: Main code that provides Console User Interface to perform the steps of the project.
 @date: 31-7-2024
 """
-from classifier import Classifier
+import datetime
+
+from ai import AIToolBox
 from collect import Collector
-from analyze import Analyzer
-from tester import Tester
+from filter import Filter
+from manual import Inspector
 
 
 def main():
@@ -14,51 +16,45 @@ def main():
     Main function to open the console user interface.
     :return: None
     """
-    project = None
     collector = Collector()
-    analyzer = Analyzer()
-    # filter = Filter()
-    tester = Tester()
-    classifier = Classifier()
-    # inspector = Inspector()
+    crypto_filter = Filter()
+    classifier = AIToolBox()
+    inspector = Inspector()
     while True:
-        print(f'» Working on project (folder): {project}')
-        print('1. Select project (folder)')
-        print('2. [AddDownloaderAPI] Collect data')
-        print('3. [AddDownloaderAPI] Analyze collected data')
-        print('4. [GoogleSafeWebAPI] Start pre-filtering')
-        print('5. [Whisper STT]      Start complex speech to text')
-        print('6. [Manual]           Run tester')
-        print('7. [Llama3.2]         Start complex classification')
-        print('8. [Manual]           data inspection')
-        print('9. DO ALL             (except analysis)')
-        print('10. Exit')
-        choice = input('Enter your choice: ')
+        print('1. [AddDownloaderAPI]    Collect data')
+        print('2. [Whisper STT]         Start video transcription')
+        print('3. [Llama3.2]            Start criteria generation')
+        print('4. [Filter]              Start crypto ad filtering')
+        print('5. [Llama3.2]            Start binary labeling')
+        print('6. [Manual]              Open manual labeling tool')
+        print('7. [Manual]              Show statistics')
+        print('8. [Llama3.2]            Relabel samples')
+        print('9. [PIPELINE]            Execute all steps')
+        print('x. Exit')
+        choice = input('» Enter your choice: ')
         if choice == '1':
-            project = input('» Enter the project name (folder): ')
+            collector.collect()
         elif choice == '2':
-            collector.collect(project_name=project)
+            classifier.transcribe_all()
         elif choice == '3':
-            analyzer.analyze()
+            classifier.generate_criteria()
         elif choice == '4':
-            print('» NOT IMPLEMENTED YET!')
-            # filter.filter()
+            crypto_filter.filter()
         elif choice == '5':
-            classifier.textify()
+            classifier.label_all()
         elif choice == '6':
-            tester.test()
+            inspector.inspect()
         elif choice == '7':
-            classifier.classify()
+            inspector.print_stats()
         elif choice == '8':
-            print('» NOT IMPLEMENTED YET!')
-            # inspector.inspect()
+            inspector.relabel()
         elif choice == '9':
-            print('» NOT IMPLEMENTED YET!')
-            # collector.collect()
-            # filter.filter()
-            # classifier.textify()
-            # classifier.classify()
-            # inspector.inspect()
+            collector.collect()
+            classifier.transcribe_all()
+            classifier.generate_criteria()
+            crypto_filter.filter()
+            classifier.label_all()
+            inspector.inspect()
         else:
             print('» Closing the program...')
             break
@@ -67,3 +63,4 @@ def main():
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     main()
+
